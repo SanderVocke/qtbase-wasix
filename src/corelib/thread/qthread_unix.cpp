@@ -63,7 +63,7 @@
 # define SCHED_IDLE    5
 #endif
 
-#if defined(Q_OS_DARWIN) || !defined(Q_OS_ANDROID) && !defined(Q_OS_OPENBSD) && defined(_POSIX_THREAD_PRIORITY_SCHEDULING) && (_POSIX_THREAD_PRIORITY_SCHEDULING-0 >= 0)
+#if defined(Q_OS_DARWIN) || !defined(WASIX) && !defined(Q_OS_ANDROID) && !defined(Q_OS_OPENBSD) && defined(_POSIX_THREAD_PRIORITY_SCHEDULING) && (_POSIX_THREAD_PRIORITY_SCHEDULING-0 >= 0)
 #define QT_HAS_THREAD_PRIORITY_SCHEDULING
 #endif
 
@@ -406,6 +406,10 @@ int QThreadPrivate::idealThreadCount = 1;
 
 int QThread::idealThreadCount() noexcept
 {
+#ifdef WASIX
+    return 10;
+#else
+
     int cores = 1;
 
 #if defined(Q_OS_HPUX)
@@ -425,6 +429,7 @@ int QThread::idealThreadCount() noexcept
         return cpuset_getaffinity(CPU_LEVEL_WHICH, CPU_WHICH_PID, -1, cpusetsize, mask);
     };
 #  endif
+
 
     // get the number of threads we're assigned, not the total in the system
     QVarLengthArray<cpu_set_t, 1> cpuset(1);
@@ -484,6 +489,7 @@ int QThread::idealThreadCount() noexcept
         return 1;
 #endif
     return cores;
+#endif
 }
 
 void QThread::yieldCurrentThread()

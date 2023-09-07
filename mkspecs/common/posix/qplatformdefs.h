@@ -12,6 +12,16 @@
 #endif
 #include <sys/stat.h>
 
+#ifdef WASIX
+#include <dirent.h>
+#include <unistd.h>
+#include <fcntl.h>
+#include <grp.h>
+#include <sys/ioctl.h>
+#undef QT_LARGEFILE_SUPPORT
+#undef QT_HAS_THREAD_PRIORITY_SCHEDULING
+#endif
+
 #if defined(QT_USE_XOPEN_LFS_EXTENSIONS) && defined(QT_LARGEFILE_SUPPORT)
 
 #define QT_STATBUF              struct stat64
@@ -85,7 +95,11 @@
 #define QT_READ                 ::read
 #define QT_WRITE                ::write
 
+#ifdef WASIX
+#define QT_OPEN_LARGEFILE       0
+#else
 #define QT_OPEN_LARGEFILE       O_LARGEFILE
+#endif
 #define QT_OPEN_RDONLY          O_RDONLY
 #define QT_OPEN_WRONLY          O_WRONLY
 #define QT_OPEN_RDWR            O_RDWR

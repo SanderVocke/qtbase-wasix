@@ -59,11 +59,14 @@ extern "C" NSString *NSTemporaryDirectory();
 #if defined(Q_OS_LINUX)
 #  include <sys/ioctl.h>
 #  include <sys/sendfile.h>
+
+#ifndef WASIX
 #  include <linux/fs.h>
 
 // in case linux/fs.h is too old and doesn't define it:
 #ifndef FICLONE
 #  define FICLONE       _IOW(0x94, 9, int)
+#endif
 #endif
 #endif
 
@@ -529,6 +532,7 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
 
     case DT_CHR:
     case DT_FIFO:
+#ifndef WASIX
     case DT_SOCK:
         // ### System attribute
         knownFlagsMask = QFileSystemMetaData::LinkType
@@ -543,7 +547,7 @@ void QFileSystemMetaData::fillFromDirEnt(const QT_DIRENT &entry)
             | QFileSystemMetaData::ExistsAttribute;
 
         break;
-
+#endif
     case DT_LNK:
         knownFlagsMask = QFileSystemMetaData::LinkType;
         entryFlags = QFileSystemMetaData::LinkType;
@@ -1044,9 +1048,12 @@ bool QFileSystemEngine::cloneFile(int srcfd, int dstfd, const QFileSystemMetaDat
     }
 
 #if defined(Q_OS_LINUX)
+    
+#ifndef WASIX
     // first, try FICLONE (only works on regular files and only on certain fs)
     if (::ioctl(dstfd, FICLONE, srcfd) == 0)
         return true;
+#endif
 
     // Second, try sendfile (it can send to some special types too).
     // sendfile(2) is limited in the kernel to 2G - 4k

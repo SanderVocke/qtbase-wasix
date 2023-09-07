@@ -71,6 +71,9 @@
 #if !defined(WEXITED) || !defined(WNOWAIT)
 #  undef HAVE_WAITID
 #endif
+#if WASIX
+#undef HAVE_WAITID
+#endif
 
 #if (defined(__FreeBSD__) && defined(__FreeBSD_version) && __FreeBSD_version >= 1300000)
 #  include <sys/eventfd.h>

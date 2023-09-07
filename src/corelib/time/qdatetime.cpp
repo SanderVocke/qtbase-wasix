@@ -35,6 +35,10 @@
 
 #include <private/qtools_p.h>
 
+#ifdef WASIX
+#include <sys/time.h>
+#endif
+
 QT_BEGIN_NAMESPACE
 
 using namespace Qt::StringLiterals;

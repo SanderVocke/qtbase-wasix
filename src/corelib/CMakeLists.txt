@@ -458,7 +458,6 @@ set(core_version_tagging_files
     global/qversiontagging.cpp
     global/qversiontagging.h)
 qt_internal_extend_target(Core
-    CONDITION TEST_ld_version_script OR APPLE OR WIN32
     SOURCES ${core_version_tagging_files}
 )
 

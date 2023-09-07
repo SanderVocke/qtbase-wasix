@@ -62,9 +62,14 @@ static ffd_atomic_int system_forkfd_state = FFD_ATOMIC_INIT(0);
 static int sys_waitid(int which, int pid_or_pidfd, siginfo_t *infop, int options,
                       struct rusage *ru)
 {
+#ifdef WASIX
+    // TODO map to wait3, wait4
+    return 0;
+#else
     /* use the waitid raw system call, which has an extra parameter that glibc
      * doesn't offer to us */
     return syscall(__NR_waitid, which, pid_or_pidfd, infop, options, ru);
+#endif
 }
 
 static int sys_clone(unsigned long cloneflags, int *ptid)

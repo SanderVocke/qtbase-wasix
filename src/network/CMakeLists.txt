@@ -170,22 +170,22 @@ qt_internal_extend_target(Network CONDITION QT_FEATURE_dnslookup
         kernel/qdnslookup.cpp kernel/qdnslookup.h kernel/qdnslookup_p.h
 )
 
-qt_internal_extend_target(Network CONDITION UNIX
-    SOURCES
-        kernel/qhostinfo_unix.cpp
-        socket/qnativesocketengine_unix.cpp
-        socket/qnet_unix_p.h
-)
+#qt_internal_extend_target(Network CONDITION 0
+#    SOURCES
+#        kernel/qhostinfo_unix.cpp
+#        socket/qnativesocketengine_unix.cpp
+#        socket/qnet_unix_p.h
+#)
 
-qt_internal_extend_target(Network CONDITION QT_FEATURE_linux_netlink AND UNIX
-    SOURCES
-        kernel/qnetworkinterface_linux.cpp
-)
+#qt_internal_extend_target(Network CONDITION QT_FEATURE_linux_netlink AND UNIX
+#    SOURCES
+#        kernel/qnetworkinterface_linux.cpp
+#)
 
-qt_internal_extend_target(Network CONDITION UNIX AND NOT QT_FEATURE_linux_netlink
-    SOURCES
-        kernel/qnetworkinterface_unix.cpp
-)
+#qt_internal_extend_target(Network CONDITION UNIX AND NOT QT_FEATURE_linux_netlink
+#    SOURCES
+#        kernel/qnetworkinterface_unix.cpp
+#)
 
 qt_internal_extend_target(Network CONDITION WIN32
     SOURCES
@@ -303,25 +303,25 @@ qt_internal_extend_target(Network CONDITION MSVC
         "-D_WINSOCK_DEPRECATED_NO_WARNINGS"
 )
 
-qt_internal_extend_target(Network CONDITION QT_FEATURE_localserver
-    SOURCES
-        socket/qlocalserver.cpp socket/qlocalserver.h socket/qlocalserver_p.h
-        socket/qlocalsocket.cpp socket/qlocalsocket.h socket/qlocalsocket_p.h
-)
+#qt_internal_extend_target(Network CONDITION QT_FEATURE_localserver
+#    SOURCES
+#        socket/qlocalserver.cpp socket/qlocalserver.h socket/qlocalserver_p.h
+#        socket/qlocalsocket.cpp socket/qlocalsocket.h socket/qlocalsocket_p.h
+#)
 
-qt_internal_extend_target(Network CONDITION INTEGRITY AND QT_FEATURE_localserver
-    SOURCES
-        socket/qlocalserver_tcp.cpp
-        socket/qlocalsocket_tcp.cpp
-    DEFINES
-        QT_LOCALSOCKET_TCP
-)
+#qt_internal_extend_target(Network CONDITION INTEGRITY AND QT_FEATURE_localserver
+#    SOURCES
+#        socket/qlocalserver_tcp.cpp
+#        socket/qlocalsocket_tcp.cpp
+#    DEFINES
+#        QT_LOCALSOCKET_TCP
+#)
 
-qt_internal_extend_target(Network CONDITION QT_FEATURE_localserver AND UNIX AND NOT INTEGRITY
-    SOURCES
-        socket/qlocalserver_unix.cpp
-        socket/qlocalsocket_unix.cpp
-)
+#qt_internal_extend_target(Network CONDITION QT_FEATURE_localserver AND UNIX AND NOT INTEGRITY
+#    SOURCES
+#        socket/qlocalserver_unix.cpp
+#        socket/qlocalsocket_unix.cpp
+#)
 
 qt_internal_extend_target(Network CONDITION QT_FEATURE_localserver AND WIN32
     SOURCES

@@ -820,8 +820,10 @@ static const char *applyProcessParameters(const QProcess::UnixProcessParameters 
             // allocates memory. Using getdents(2) plus either strtoul() or
             // std::from_chars() would be acceptable.
             int max_fd = INT_MAX;
+#ifndef WASIX
             if (struct rlimit limit; getrlimit(RLIMIT_NOFILE, &limit) == 0)
                 max_fd = limit.rlim_cur;
+#endif
             for ( ; fd < max_fd; ++fd)
                 close(fd);
         }
@@ -833,6 +835,7 @@ static const char *applyProcessParameters(const QProcess::UnixProcessParameters 
             return "setsid";
     }
 
+#ifndef WASIX
     // Disconnect from the controlling TTY. This probably won't fail. Must be
     // done after the session settings from above.
     if (params.flags.testFlag(QProcess::UnixProcessFlag::DisconnectControllingTerminal)) {
@@ -847,6 +850,7 @@ static const char *applyProcessParameters(const QProcess::UnixProcessParameters 
             }
         }
     }
+#endif
 
     // Apply UID and GID parameters last. This isn't expected to fail either:
     // either we're trying to impersonate what we already are, or we're EUID or
@@ -863,14 +867,14 @@ static const char *applyProcessParameters(const QProcess::UnixProcessParameters 
 // the noexcept here adds an extra layer of protection
 static void callChildProcessModifier(const QProcessPrivate *d) noexcept
 {
-    QT_TRY {
+    //QT_TRY {
         if (d->unixExtras->childProcessModifier)
             d->unixExtras->childProcessModifier();
-    } QT_CATCH (std::exception &e) {
-        failChildProcess(d, e.what(), FakeErrnoForThrow);
-    } QT_CATCH (...) {
-        failChildProcess(d, "throw", FakeErrnoForThrow);
-    }
+    //} QT_CATCH (std::exception &e) {
+    //    failChildProcess(d, e.what(), FakeErrnoForThrow);
+    //} QT_CATCH (...) {
+    //    failChildProcess(d, "throw", FakeErrnoForThrow);
+    //}
 }
 
 // IMPORTANT:
@@ -886,9 +890,11 @@ void QChildProcess::startProcess() const noexcept
     // make sure this fd is closed if execv() succeeds
     qt_safe_close(d->childStartedPipe[0]);
 
+#ifndef WASIX
     // enter the working directory
     if (workingDirectory >= 0 && fchdir(workingDirectory) == -1)
         failChildProcess(d, "fchdir", errno);
+#endif
 
     bool sigpipeHandled = false;
     bool sigmaskHandled = false;

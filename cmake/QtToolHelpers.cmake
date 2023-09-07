@@ -50,7 +50,8 @@ function(qt_internal_add_tool target_name)
         INSTALL_VERSIONED_LINK
         EXCEPTIONS
         NO_UNITY_BUILD
-        TRY_RUN)
+        TRY_RUN
+        FORCE_BUILD)
     set(one_value_keywords
         TOOLS_TARGET
         INSTALL_DIR
@@ -71,7 +72,7 @@ function(qt_internal_add_tool target_name)
 
     qt_internal_find_tool(will_build_tools ${target_name} "${arg_TOOLS_TARGET}")
 
-    if(NOT will_build_tools)
+    if(NOT will_build_tools AND NOT arg_FORCE_BUILD)
         return()
     endif()
 
@@ -503,7 +504,7 @@ function(qt_check_if_tools_will_be_built)
         set(will_build_tools FALSE)
         if(QT_FORCE_BUILD_TOOLS)
             set(will_build_tools TRUE)
-            set(need_target_rename TRUE)
+            set(need_target_rename FALSE)
         endif()
     else()
         set(will_build_tools TRUE)

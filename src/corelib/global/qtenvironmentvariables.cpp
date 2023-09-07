@@ -12,6 +12,14 @@
 
 #include <QtCore/private/qlocking_p.h>
 
+#ifdef WASIX
+
+const char* tzname[2] = {
+   "TZ", "TZ"
+};
+
+#endif
+
 QT_BEGIN_NAMESPACE
 
 // In the C runtime on all platforms access to the environment is not thread-safe. We

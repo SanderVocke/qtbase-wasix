@@ -299,3 +299,4 @@ QFunctionPointer QLibraryPrivate::resolve_sys(const char *symbol)
 }
 
 QT_END_NAMESPACE
+

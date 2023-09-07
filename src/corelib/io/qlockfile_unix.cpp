@@ -29,6 +29,11 @@
 #  undef LOCK_NB
 #endif
 
+#ifdef WASIX
+#undef LOCK_EX
+#undef LOCK_NB
+#endif
+
 #include <sys/types.h> // kill
 #include <signal.h>    // kill
 #include <unistd.h>    // gethostname

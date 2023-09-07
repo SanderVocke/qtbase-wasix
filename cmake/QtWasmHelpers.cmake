@@ -11,7 +11,7 @@ function (qt_internal_setup_wasm_target_properties wasmTarget)
     "SHELL:-s WASM_BIGINT=1"
     "SHELL:-s STACK_SIZE=5MB")
 
-    target_link_libraries("${wasmTarget}" INTERFACE embind)
+    #target_link_libraries("${wasmTarget}" INTERFACE embind)
 
     ## wasm64
     if (WASM64)
@@ -31,12 +31,12 @@ function (qt_internal_setup_wasm_target_properties wasmTarget)
     endif()
 
     # wasm exceptions
-    if (QT_FEATURE_wasm_exceptions)
-        target_compile_options("${wasmTarget}" INTERFACE -fwasm-exceptions)
-        target_link_options("${wasmTarget}" INTERFACE -fwasm-exceptions)
-    else()
+    #if (QT_FEATURE_wasm_exceptions)
+    #    target_compile_options("${wasmTarget}" INTERFACE -fwasm-exceptions)
+    #    target_link_options("${wasmTarget}" INTERFACE -fwasm-exceptions)
+    #else()
         target_link_options("${wasmTarget}" INTERFACE "SHELL:-s DISABLE_EXCEPTION_CATCHING=1")
-    endif()
+    #endif()
 
     if (QT_FEATURE_thread)
         target_compile_options("${wasmTarget}" INTERFACE "SHELL:-pthread")
@@ -46,19 +46,19 @@ function (qt_internal_setup_wasm_target_properties wasmTarget)
     target_link_options("${wasmTarget}" INTERFACE "SHELL:-s ALLOW_MEMORY_GROWTH")
 
     # debug add_compile_options
-    if ("QT_WASM_SOURCE_MAP=1" IN_LIST QT_QMAKE_DEVICE_OPTIONS)
-        set(WASM_SOURCE_MAP_BASE "http://localhost:8000/")
+    #if ("QT_WASM_SOURCE_MAP=1" IN_LIST QT_QMAKE_DEVICE_OPTIONS)
+    #    set(WASM_SOURCE_MAP_BASE "http://localhost:8000/")
 
-        if(DEFINED QT_WASM_SOURCE_MAP_BASE)
-            set(WASM_SOURCE_MAP_BASE "${QT_WASM_SOURCE_MAP_BASE}")
-        endif()
+    #    if(DEFINED QT_WASM_SOURCE_MAP_BASE)
+    #        set(WASM_SOURCE_MAP_BASE "${QT_WASM_SOURCE_MAP_BASE}")
+    #    endif()
 
         # Pass --source-map-base on the linker line. This informs the
         # browser where to find the source files when debugging.
         # -g4 to make source maps for debugging
-        target_link_options("${wasmTarget}" INTERFACE  "-gsource-map" "--source-map-base" "${WASM_SOURCE_MAP_BASE}")
+    #    target_link_options("${wasmTarget}" INTERFACE  "-gsource-map" "--source-map-base" "${WASM_SOURCE_MAP_BASE}")
 
-    endif()
+    #endif()
 
     # a few good defaults to make console more verbose while debugging
     target_link_options("${wasmTarget}" INTERFACE $<$<CONFIG:Debug>:
@@ -121,9 +121,9 @@ function (qt_internal_setup_wasm_target_properties wasmTarget)
 endfunction()
 
 function(qt_internal_wasm_add_finalizers target)
-    qt_add_list_file_finalizer(_qt_internal_set_wasm_export_name ${target})
-    qt_add_list_file_finalizer(_qt_internal_add_wasm_extra_exported_methods ${target})
-    qt_add_list_file_finalizer(_qt_internal_wasm_add_target_helpers ${target})
+    #qt_add_list_file_finalizer(_qt_internal_set_wasm_export_name ${target})
+    #qt_add_list_file_finalizer(_qt_internal_add_wasm_extra_exported_methods ${target})
+    #qt_add_list_file_finalizer(_qt_internal_wasm_add_target_helpers ${target})
 endfunction()
 
 

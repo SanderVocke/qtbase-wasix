@@ -80,7 +80,14 @@ extern char *__progname;
 #  define QLOGGING_HAVE_BACKTRACE
 #endif
 
-#if defined(Q_OS_LINUX) && (defined(__GLIBC__) || __has_include(<sys/syscall.h>))
+#if(WASIX)
+# include <wasi/api_wasix.h>
+static long qt_gettid() {
+    __wasi_tid_t r;
+    __wasi_thread_id(&r);
+    return (long)r;
+}
+#elif defined(Q_OS_LINUX) && (defined(__GLIBC__) || __has_include(<sys/syscall.h>))
 #  include <sys/syscall.h>
 
 # if defined(Q_OS_ANDROID) && !defined(SYS_gettid)
